@@ -20,8 +20,8 @@
 
 @implementation IASKPSToggleSwitchSpecifierViewCell
 
-@synthesize label=_label, 
-            toggle=_toggle;
+@synthesize label=_label; 
+@synthesize toggle=_toggle;
             
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -36,11 +36,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-
-- (void)dealloc {
-    [super dealloc];
 }
 
 - (void)layoutSubviews {
