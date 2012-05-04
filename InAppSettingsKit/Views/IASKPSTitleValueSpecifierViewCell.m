@@ -25,7 +25,8 @@
 	if (!self.textLabel.text.length) {
 		self.textLabel.text = self.detailTextLabel.text;
 		self.detailTextLabel.text = nil;
-		if ([self.reuseIdentifier isEqualToString:kIASKPSMultiValueSpecifier]) {
+		if ([self.reuseIdentifier isEqualToString:kIASKPSMultiValueSpecifier] ||
+            [self.reuseIdentifier isEqualToString:kIASKPSMultiValueTitleOnlySpecifier]) {
 			self.textLabel.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
 			self.textLabel.textColor = self.detailTextLabel.textColor;
 		}

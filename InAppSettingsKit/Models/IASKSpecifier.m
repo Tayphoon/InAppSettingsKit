@@ -33,7 +33,8 @@
         [self setSpecifierDict:specifier];
         
         if ([[self type] isEqualToString:kIASKPSMultiValueSpecifier] ||
-			[[self type] isEqualToString:kIASKPSTitleValueSpecifier]) {
+			[[self type] isEqualToString:kIASKPSMultiValueTitleOnlySpecifier] ||
+            [[self type] isEqualToString:kIASKPSTitleValueSpecifier]) {
             [self _reinterpretValues:[self specifierDict]];
         }
     }

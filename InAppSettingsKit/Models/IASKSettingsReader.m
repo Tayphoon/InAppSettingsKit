@@ -75,12 +75,15 @@ dataSource=_dataSource;
 	_settingsBundle = nil;
 	_dataSource = nil;
 	_bundle = nil;
+    _settingsTitle = nil;
 }
 
 - (void)_reinterpretBundle:(NSDictionary*)settingsBundle {
 	NSArray *preferenceSpecifiers	= [settingsBundle objectForKey:kIASKPreferenceSpecifiers];
 	NSInteger sectionCount			= -1;
 	NSMutableArray *dataSource		= [[NSMutableArray alloc] init];
+    
+    _settingsTitle = [self titleForStringId:[settingsBundle objectForKey:kIASKTitle]];
 	
 	for (NSDictionary *specifier in preferenceSpecifiers) {
 		if ([(NSString*)[specifier objectForKey:kIASKType] isEqualToString:kIASKPSGroupSpecifier]) {
@@ -106,6 +109,10 @@ dataSource=_dataSource;
 
 - (BOOL)_sectionHasHeading:(NSInteger)section {
 	return [[[[self dataSource] objectAtIndex:section] objectAtIndex:0] isKindOfClass:[NSDictionary class]];
+}
+
+- (NSString*)settingsTitle {
+    return _settingsTitle;   
 }
 
 - (NSInteger)numberOfSections {

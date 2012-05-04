@@ -60,7 +60,7 @@
 
 @interface IASKAppSettingsViewController : UITableViewController <IASKViewController, UITextFieldDelegate, UINavigationControllerDelegate, MFMailComposeViewControllerDelegate> {
 	__weak id<IASKSettingsDelegate>  _delegate;
-    
+    UINavigationController * _navigationController;
     NSMutableArray          *_viewList;
 	
 	IASKSettingsReader		*_settingsReader;

@@ -33,8 +33,6 @@ static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
 
-static NSString *kIASKCredits = @"Powered by InAppSettingsKit"; // Leave this as-is!!!
-
 #define kIASKSpecifierValuesViewControllerIndex       0
 #define kIASKSpecifierChildViewControllerIndex        1
 
@@ -171,6 +169,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 		[self.tableView selectRowAtIndexPath:selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
 	
+    [self.navigationItem.backBarButtonItem setTitle:@"Back"];
+    
 	self.navigationItem.rightBarButtonItem = nil;
 	self.navigationController.delegate = self;
 	if (_showDoneButton) {
@@ -178,7 +178,10 @@ CGRect IASKCGRectSwap(CGRect rect);
 																					target:self 
 																					action:@selector(dismiss:)];
 		self.navigationItem.rightBarButtonItem = buttonItem;
-	} 
+	}
+    
+    self.title = [self.settingsReader settingsTitle];
+    
 	if (!self.title) {
 		self.title = NSLocalizedString(@"Settings", @"");
 	}
@@ -364,10 +367,10 @@ CGRect IASKCGRectSwap(CGRect rect);
 		// show credits since this is the last section
 		if ((footerText == nil) || ([footerText length] == 0)) {
 			// show the credits on their own
-			return kIASKCredits;
+			return @"";
 		} else {
 			// show the credits below the app's FooterText
-			return [NSString stringWithFormat:@"%@\n\n%@", footerText, kIASKCredits];
+			return [NSString stringWithFormat:@"%@\n\n%@", footerText, @""];
 		}
 	} else {
 		if ([footerText length] == 0) {
@@ -384,9 +387,11 @@ CGRect IASKCGRectSwap(CGRect rect);
 											  owner:self 
 											options:nil] objectAtIndex:0];
 	}
-	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
+	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] ||
+             [identifier isEqualToString:kIASKPSMultiValueTitleOnlySpecifier] ||
+             [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
 		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
-		cell.accessoryType = [identifier isEqualToString:kIASKPSMultiValueSpecifier] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+		cell.accessoryType = ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSMultiValueTitleOnlySpecifier]) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	}
 	else if ([identifier isEqualToString:kIASKPSTextFieldSpecifier]) {
 		cell = (IASKPSTextFieldSpecifierViewCell*) [[[NSBundle mainBundle] loadNibNamed:@"IASKPSTextFieldSpecifierViewCell" 
@@ -446,6 +451,9 @@ CGRect IASKCGRectSwap(CGRect rect);
 		cell.textLabel.text = specifier.title;
 		cell.detailTextLabel.text = [[specifier titleForCurrentValue:[self.settingsStore objectForKey:specifier.key] != nil ? 
 									  [self.settingsStore objectForKey:specifier.key] : specifier.defaultValue] description];
+	}
+    else if ([specifier.type isEqualToString:kIASKPSMultiValueTitleOnlySpecifier]) {
+		cell.textLabel.text = specifier.title;
 	}
 	else if ([specifier.type isEqualToString:kIASKPSTitleValueSpecifier]) {
 		cell.textLabel.text = specifier.title;
@@ -537,7 +545,8 @@ CGRect IASKCGRectSwap(CGRect rect);
     assert(![[specifier type] isEqualToString:kIASKPSToggleSwitchSpecifier]);
     assert(![[specifier type] isEqualToString:kIASKPSSliderSpecifier]);
 
-    if ([[specifier type] isEqualToString:kIASKPSMultiValueSpecifier]) {
+    if ([[specifier type] isEqualToString:kIASKPSMultiValueSpecifier] ||
+        [[specifier type] isEqualToString:kIASKPSMultiValueTitleOnlySpecifier]) {
         IASKSpecifierValuesViewController *targetViewController = [[self.viewList objectAtIndex:kIASKSpecifierValuesViewControllerIndex] objectForKey:@"viewController"];
 		
         if (targetViewController == nil) {

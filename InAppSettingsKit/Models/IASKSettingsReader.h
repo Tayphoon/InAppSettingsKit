@@ -63,6 +63,7 @@
 #define kIASKPSGroupSpecifier                 @"PSGroupSpecifier"
 #define kIASKPSToggleSwitchSpecifier          @"PSToggleSwitchSpecifier"
 #define kIASKPSMultiValueSpecifier            @"PSMultiValueSpecifier"
+#define kIASKPSMultiValueTitleOnlySpecifier   @"PSMultiValueTitleOnlySpecifier"
 #define kIASKPSSliderSpecifier                @"PSSliderSpecifier"
 #define kIASKPSTitleValueSpecifier            @"PSTitleValueSpecifier"
 #define kIASKPSTextFieldSpecifier             @"PSTextFieldSpecifier"
@@ -121,9 +122,11 @@ __VA_ARGS__ \
     NSDictionary    *_settingsBundle;
     NSArray         *_dataSource;
     NSBundle        *_bundle;
+    NSString        *_settingsTitle;
 }
 
 - (id)initWithFile:(NSString*)file;
+- (NSString*)settingsTitle;
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfRowsForSection:(NSInteger)section;
 - (IASKSpecifier*)specifierForIndexPath:(NSIndexPath*)indexPath;
